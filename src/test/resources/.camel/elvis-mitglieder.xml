@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<Mitglieder>
+   <Mitglied>
+      <Nummer>0004940</Nummer>
+      <Nummer-Uebungsleiter/>
+      <Nummer-Kursteilnehmer/>
+      <Personalien>
+         <Schluessel/>
+         <Anrede>Herrn</Anrede>
+         <Briefanrede>er Herr</Briefanrede>
+         <Titel/>
+         <Nachname>Hobiger</Nachname>
+         <Vorname>Wolfgang</Vorname>
+         <Organisation/>
+         <Geschlecht>M</Geschlecht>
+         <GeschlechtText>m�nnlich</GeschlechtText>
+         <Geburtsdatum>13.04.1951</Geburtsdatum>
+         <GeburtsdatumNum>19510413</GeburtsdatumNum>
+         <Alter>71</Alter>
+         <Hochzeitsdatum/>
+         <Geburtsort/>
+         <Geburtsname/>
+         <Beruf/>
+         <Nationalitaet/>
+      </Personalien>
+      <Adresse>
+         <co/>
+         <PostfachalsStandard>nein</PostfachalsStandard>
+         <Postfach/>
+         <PostleitzahlPostfach/>
+         <Strasse>Bergstra�e  </Strasse>
+         <Hausnummer>    6</Hausnummer>
+         <HausnummerZusatz/>
+         <Postleitzahl>97076</Postleitzahl>
+         <Ort>W�rzburg </Ort>
+         <Bezirk>84</Bezirk>
+         <Landeskennung/>
+      </Adresse>
+      <Kommunikation>
+         <Privat>
+            <Telefon>272650</Telefon>
+            <Fax/>
+            <Mobil/>
+            <Pager/>
+            <Internetadresse/>
+            <email>wolfgang.hobiger@gmx.de</email>
+         </Privat>
+         <Dienstlich>
+            <Telefon/>
+            <Fax/>
+            <Mobil/>
+            <Pager/>
+            <Internetadresse/>
+            <email/>
+         </Dienstlich>
+      </Kommunikation>
+      <Status>
+         <Eintrittsdatum>01.01.1970</Eintrittsdatum>
+         <EintrittsdatumNum>19700101</EintrittsdatumNum>
+         <Eintrittsbrief_erstellt>ja</Eintrittsbrief_erstellt>
+         <Austrittsdatum/>
+         <AustrittsdatumNum/>
+         <Austrittsbrief_erstellt>nein</Austrittsbrief_erstellt>
+         <Jahr_im_Verein>52</Jahr_im_Verein>
+         <Kuendigungsdatum/>
+         <KuendigungsdatumNum/>
+         <Kuendigungsgrund/>
+         <Ermaessigt_bis/>
+         <Ermaessigt_bisNum/>
+         <Anzahl_Ausweise>1</Anzahl_Ausweise>
+         <Erstbeitrag>0,00</Erstbeitrag>
+         <Erstbeitrag>0,00</Erstbeitrag>
+         <Ehrenmitglied>nein</Ehrenmitglied>
+      </Status>
+      <Zahlungsdaten>
+         <Zahlungsart>Lastschriftenzahler</Zahlungsart>
+         <Kontosaldo>0,00</Kontosaldo>
+         <Bankverbindung>
+            <Kontonummer>6408745</Kontonummer>
+            <Bankleitzahl>79090000</Bankleitzahl>
+            <Bankname>V+R Bank W�rzburg</Bankname>
+         </Bankverbindung>
+         <Zahleranrede>Herrn</Zahleranrede>
+         <Zahlerbriefanrede>er Herr</Zahlerbriefanrede>
+         <Zahlernachname>Hobiger</Zahlernachname>
+         <Zahlervorname>Wolfgang</Zahlervorname>
+      </Zahlungsdaten>
+      <Akquisition>
+         <Methode/>
+         <am/>
+         <amNum/>
+         <durch/>
+         <Bemerkung/>
+      </Akquisition>
+      <CheckInOut>
+         <CIONr/>
+         <Schluessel/>
+         <Tageskarten>0</Tageskarten>
+      </CheckInOut>
+      <Abteilungen>
+         <Abteilung>
+            <Bezeichnung>Fu�ball</Bezeichnung>
+            <Gruppe/>
+            <AktivPassiv>Passiv</AktivPassiv>
+            <Eintrittsdatum>16.06.2016</Eintrittsdatum>
+            <EintrittsdatumNum>20160616</EintrittsdatumNum>
+            <Austrittsdatum/>
+            <AustrittsdatumNum/>
+            <Hauptabteilung>nein</Hauptabteilung>
+         </Abteilung>
+         <Abteilung>
+            <Bezeichnung>Breitensport aktiv </Bezeichnung>
+            <Gruppe/>
+            <AktivPassiv>Aktiv</AktivPassiv>
+            <Eintrittsdatum>18.10.2018</Eintrittsdatum>
+            <EintrittsdatumNum>20181018</EintrittsdatumNum>
+            <Austrittsdatum/>
+            <AustrittsdatumNum/>
+            <Hauptabteilung>nein</Hauptabteilung>
+         </Abteilung>
+         <Abteilung>
+            <Bezeichnung>TSV Lengfeld 1876 e.V.</Bezeichnung>
+            <Gruppe/>
+            <AktivPassiv>Aktiv</AktivPassiv>
+            <Eintrittsdatum>01.01.1970</Eintrittsdatum>
+            <EintrittsdatumNum>19700101</EintrittsdatumNum>
+            <Austrittsdatum/>
+            <AustrittsdatumNum/>
+            <Hauptabteilung>nein</Hauptabteilung>
+         </Abteilung>
+         <aktive>1</aktive>
+         <passive>1</passive>
+      </Abteilungen>
+      <Beitraege>
+         <Beitrag>
+            <Beitragsgruppe>TSV Lengfeld 1876 e.V.</Beitragsgruppe>
+            <Beitragsart>Rentner Einzel /Arbeitslose</Beitragsart>
+            <Zahlweise>j�hrlich</Zahlweise>
+            <Betrag>0,00</Betrag>
+            <AufnahmegebuehrBezeichnung/>
+            <Aufnahmegebuehr>0,00</Aufnahmegebuehr>
+            <Erstbeitrag>0,00</Erstbeitrag>
+            <LetzteAbrechnung/>
+            <LetzteAbrechnungNum/>
+         </Beitrag>
+         <Beitrag>
+            <Beitragsgruppe>TSV Lengfeld 1876 e.V.</Beitragsgruppe>
+            <Beitragsart>Breitensport Erwachsene</Beitragsart>
+            <Zahlweise>j�hrlich</Zahlweise>
+            <Betrag>0,00</Betrag>
+            <AufnahmegebuehrBezeichnung/>
+            <Aufnahmegebuehr>0,00</Aufnahmegebuehr>
+            <Erstbeitrag>0,00</Erstbeitrag>
+            <LetzteAbrechnung/>
+            <LetzteAbrechnungNum/>
+         </Beitrag>
+         <Beitrag>
+            <Beitragsgruppe>TSV Lengfeld 1876 e.V.</Beitragsgruppe>
+            <Beitragsart>FB abteilungsbeitragsfrei</Beitragsart>
+            <Zahlweise>j�hrlich</Zahlweise>
+            <Betrag>0,00</Betrag>
+            <AufnahmegebuehrBezeichnung/>
+            <Aufnahmegebuehr>0,00</Aufnahmegebuehr>
+            <Erstbeitrag>0,00</Erstbeitrag>
+            <LetzteAbrechnung/>
+            <LetzteAbrechnungNum/>
+         </Beitrag>
+      </Beitraege>
+      <Serienkennungen>
+         <Serienkennung>
+            <Kennung>A</Kennung>
+            <Kuerzel>Abt.Lt./Vorstand</Kuerzel>
+         </Serienkennung>
+         <Serienkennung>
+            <Kennung>ABT</Kennung>
+            <Kuerzel>Abteilungsformular abgegeben 2018</Kuerzel>
+         </Serienkennung>
+         <Serienkennung>
+            <Kennung>B</Kennung>
+            <Kuerzel>Brief</Kuerzel>
+         </Serienkennung>
+         <Serienkennung>
+            <Kennung>E</Kennung>
+            <Kuerzel>Ehrungen</Kuerzel>
+         </Serienkennung>
+      </Serienkennungen>
+      <Funktionen>
+         <Funktion>
+            <FunktionKng>F01</FunktionKng>
+            <Funktion>Vorstandsmitglied </Funktion>
+            <AbteilungNr/>
+            <Abteilung/>
+            <Vondatum>07.06.2021</Vondatum>
+            <VondatumNum>20210607</VondatumNum>
+            <Bisdatum/>
+            <BisdatumNum/>
+            <KSBPersonennummer/>
+            <LSBPersonennummer/>
+         </Funktion>
+         <Funktion>
+            <FunktionKng>F02</FunktionKng>
+            <Funktion>1. Abteilungsleiter </Funktion>
+            <AbteilungNr/>
+            <Abteilung/>
+            <Vondatum>01.01.1999</Vondatum>
+            <VondatumNum>19990101</VondatumNum>
+            <Bisdatum>06.05.2007</Bisdatum>
+            <BisdatumNum>20070506</BisdatumNum>
+            <KSBPersonennummer/>
+            <LSBPersonennummer/>
+         </Funktion>
+      </Funktionen>
+      <Ehrungen>
+         <Ehrung>
+            <EhrungKng>E25</EhrungKng>
+            <Ehrung>Vereinsnadel Silber </Ehrung>
+            <Ehrungsdatum>01.05.1995</Ehrungsdatum>
+            <EhrungsdatumNum>19950501</EhrungsdatumNum>
+         </Ehrung>
+         <Ehrung>
+            <EhrungKng>ELS</EhrungKng>
+            <Ehrung>Leistungsnadel Silber </Ehrung>
+            <Ehrungsdatum>01.09.2005</Ehrungsdatum>
+            <EhrungsdatumNum>20050901</EhrungsdatumNum>
+         </Ehrung>
+      </Ehrungen>
+   </Mitglied>
+</Mitglieder>
