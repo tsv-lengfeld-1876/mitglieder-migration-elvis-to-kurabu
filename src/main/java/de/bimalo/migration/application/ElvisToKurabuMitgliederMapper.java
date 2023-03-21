@@ -1,21 +1,20 @@
 package de.bimalo.migration.application;
 
-import java.net.URL;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import de.bimalo.migration.entity.elvis.ElvisMitgliedWithIban;
-import org.iban4j.CountryCode;
-import org.iban4j.Iban;
-import org.iban4j.IbanFormatException;
-
 import de.bimalo.migration.entity.elvis.Mitglieder;
 import de.bimalo.migration.entity.kurabu.KurabuMitglied;
 import lombok.NonNull;
 import lombok.extern.java.Log;
+import org.iban4j.CountryCode;
+import org.iban4j.Iban;
+import org.iban4j.IbanFormatException;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 @Log
 public final class ElvisToKurabuMitgliederMapper {
@@ -53,7 +52,11 @@ public final class ElvisToKurabuMitgliederMapper {
             mapKommunikation(elvisMitglied, kurabuMitglied);
             mapMitgliederStatus(elvisMitglied, kurabuMitglied);
             mapZahlungsdaten(elvisMitglied, kurabuMitglied);
-            mapAbteilung(elvisMitglied, kurabuMitglied);
+            mapAbteilungToNotizen(elvisMitglied, kurabuMitglied);
+            mapBeitraege(elvisMitglied, kurabuMitglied);
+            mapFamilie(elvisMitglied, kurabuMitglied);
+            mapEhrungen(elvisMitglied, kurabuMitglied);
+            mapCustomFields(elvisMitglied, kurabuMitglied);
         }
         catch (Exception ex) {
             //throw new RuntimeException(String.format("Could not migrate %s %s (%s), because of %s.", elvisMitglied.getPersonalien().getVorname(), elvisMitglied.getPersonalien().getNachname(), elvisMitglied.getNummer(), ex.getMessage()), ex);
@@ -108,42 +111,53 @@ public final class ElvisToKurabuMitgliederMapper {
 
     private void mapZahlungsdaten(Mitglieder.Mitglied elvisMitglied, KurabuMitglied kurabuMitglied) {
         if (isSelbstzahler(elvisMitglied)) {
-            Zahlungsart zart = Zahlungsart.findZahlungsart(elvisMitglied.getZahlungsdaten().getZahlungsart());
-            kurabuMitglied.setZahlungsmethode(zart.getKurabuZahlungsart());
-            if (zart.equals(Zahlungsart.LASTSCHRIFTENZAHLER)) {
+            Zahlungsart zahlungsArt = Zahlungsart.findZahlungsart(elvisMitglied.getZahlungsdaten().getZahlungsart());
+            kurabuMitglied.setZahlungsmethode(zahlungsArt.getKurabuZahlungsart());
+            if (zahlungsArt == Zahlungsart.LASTSCHRIFTENZAHLER) {
                 kurabuMitglied.setKontoinhaber(compineStringValues(elvisMitglied.getZahlungsdaten().getZahlervorname(), elvisMitglied.getZahlungsdaten().getZahlernachname()));
                 kurabuMitglied.setSepaMandatsId(elvisMitglied.getNummer());
                 kurabuMitglied.setIban(calculateIban(elvisMitglied).toFormattedString());
                 kurabuMitglied.setDatumMandatsunterschrift(LocalDate.parse(elvisMitglied.getStatus().getEintrittsdatum(), dateFormatter));
             }
-            else if (zart.equals(Zahlungsart.RECHNUNGSZAHLER)) {
+            else if (zahlungsArt == Zahlungsart.RECHNUNGSZAHLER) {
                 kurabuMitglied.setSaldo(elvisMitglied.getZahlungsdaten().getKontosaldo());
             }
         }
     }
 
-    private void mapAbteilung(Mitglieder.Mitglied elvisMitglied, KurabuMitglied kurabuMitglied) {
-        StringBuilder notizBuilder = new StringBuilder();
-        notizBuilder.append("\"");
-        /**
-        String existingNotizen = kurabuMitglied.getNotizen();
-        if (existingNotizen != null) {
-            notizBuilder.append(existingNotizen);
-        }
-         **/
+    private void mapAbteilungToNotizen(Mitglieder.Mitglied elvisMitglied, KurabuMitglied kurabuMitglied) {
+            StringJoiner notizenJoiner = new StringJoiner("\n");
 
-        for(Mitglieder.Mitglied.Abteilungen.Abteilung elvisAbteilung : elvisMitglied.getAbteilungen().getAbteilung()) {
-             notizBuilder.append(String.format("Abteilung %s (%s): Eintritt= %s - Austritt= %s.", elvisAbteilung.getBezeichnung(), elvisAbteilung.getGruppe(), elvisAbteilung.getEintrittsdatum(), elvisAbteilung.getAustrittsdatum())).append("\n");
-             /*
-             Abteilung abteilung = Abteilung.findAbteilungByElvis(elvisAbteilung.getBezeichnung());
-             if (abteilung.isMigrate()) {
-             }
-             */
-         }
+            for (Mitglieder.Mitglied.Abteilungen.Abteilung elvisAbteilung : elvisMitglied.getAbteilungen().getAbteilung()) {
+                notizenJoiner.add(String.format("Abteilung %s (%s): Eintritt= %s - Austritt= %s.", elvisAbteilung.getBezeichnung(), elvisAbteilung.getAktivPassiv(), elvisAbteilung.getEintrittsdatum(), elvisAbteilung.getAustrittsdatum()));
+            }
 
-        notizBuilder.append("\"");
-        kurabuMitglied.setNotizen(notizBuilder.toString());
+            notizenJoiner.add("");
+            kurabuMitglied.setNotizen("\"" + notizenJoiner.toString() + "\"");
+      }
 
+   private void mapBeitraege(Mitglieder.Mitglied elvisMitglied, KurabuMitglied kurabuMitglied) {
+       StringJoiner beitragsJoiner = new StringJoiner(";");
+
+       for(Mitglieder.Mitglied.Beitraege.Beitrag elvisBeitrag : elvisMitglied.getBeitraege().getBeitrag()) {
+           Beitragsklasse beitragsKlasse = Beitragsklasse.findBeitragsklasseByElvis(elvisBeitrag.getBeitragsart().strip());
+           if (beitragsKlasse.mustBeMigrated()) {
+               beitragsJoiner.add(beitragsKlasse.getKurabuBeitrag());
+           }
+       }
+       kurabuMitglied.setBeitraege("\"" + beitragsJoiner.toString() + "\"");
+   }
+
+    private void mapEhrungen(Mitglieder.Mitglied elvisMitglied, KurabuMitglied kurabuMitglied) {
+        //TODO
+    }
+
+    private void mapFamilie(Mitglieder.Mitglied elvisMitglied, KurabuMitglied kurabuMitglied) {
+        //TODO
+    }
+
+    private void mapCustomFields(Mitglieder.Mitglied elvisMitglied, KurabuMitglied kurabuMitglied) {
+      //TODO
     }
 
     private boolean isSelbstzahler(Mitglieder.Mitglied elvisMitglied) {
