@@ -1,12 +1,14 @@
 package de.bimalo.migration.boundary.services.file;
 
+import de.bimalo.migration.application.AbteilungszuordnungFileCreatorRoute;
 import de.bimalo.migration.application.KurabuImportFileCreatorRoute;
 import de.bimalo.migration.application.MitgliederMigrationRoute;
 import de.bimalo.migration.application.ReportFileCreatorRoute;
-import javax.enterprise.context.ApplicationScoped;
 import org.apache.camel.Exchange;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
+
+import javax.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public final class ElvisMitgliederXmlFileReader extends RouteBuilder {
@@ -28,8 +30,9 @@ public final class ElvisMitgliederXmlFileReader extends RouteBuilder {
             "============ BEGIN: docnum=${header.breadcrumbId} file=${file:name} ============ ")
         .to(MitgliederMigrationRoute.ROUTE_URL)
         .multicast()
-        .to(KurabuImportFileCreatorRoute.ROUTE_URL)
-        .to(ReportFileCreatorRoute.ROUTE_URL)
+          .to(KurabuImportFileCreatorRoute.ROUTE_URL)
+          .to(AbteilungszuordnungFileCreatorRoute.ROUTE_URL)
+          .to(ReportFileCreatorRoute.ROUTE_URL)
         .log(
             LoggingLevel.INFO,
             "============ FINISHED: docnum=${header.breadcrumbId} file=${file:name} ============ ");
