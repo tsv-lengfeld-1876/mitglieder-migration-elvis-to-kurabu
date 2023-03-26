@@ -17,7 +17,7 @@ public final class MitgliederIbanDataRoute extends RouteBuilder {
     public final static String ROUTE_URL = "direct:" + ROUTE_ID;
 
     //spotless:off
-     @Override
+    @Override
     public void configure() throws Exception {
 
          DataFormat mitgliederIbanFormat = new BindyCsvDataFormat(ElvisMitgliedWithIban.class);
@@ -30,4 +30,5 @@ public final class MitgliederIbanDataRoute extends RouteBuilder {
                     .unmarshal(mitgliederIbanFormat)
                   .log(LoggingLevel.INFO, "FINISHED: " + ROUTE_ID + ".");
      }
+    //spotless:on
 }

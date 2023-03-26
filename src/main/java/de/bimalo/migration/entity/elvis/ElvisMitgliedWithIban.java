@@ -8,16 +8,15 @@ import org.apache.camel.dataformat.bindy.annotation.DataField;
 @Data
 public class ElvisMitgliedWithIban {
 
-    @DataField(pos = 1, columnName = "Mitglied-Nr")
-    private String mitgliedNr;
+  @DataField(pos = 1, columnName = "Mitglied-Nr")
+  private String mitgliedNr;
 
-    @DataField(pos = 2, columnName = "Nachname")
-    private String nachname;
+  @DataField(pos = 2, columnName = "Nachname")
+  private String nachname;
 
-    @DataField(pos = 3, columnName = "Vorname")
-    private String vorname;
+  @DataField(pos = 3, columnName = "Vorname")
+  private String vorname;
 
-    @DataField(pos = 4, columnName = "IBAN")
-    private String iban;
-
+  @DataField(pos = 4, columnName = "IBAN")
+  private String iban;
 }

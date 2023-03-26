@@ -1,5 +1,6 @@
 package de.bimalo.migration.application;
 
+import de.bimalo.migration.entity.MappingResult;
 import de.bimalo.migration.entity.elvis.ElvisMitgliedWithIban;
 import de.bimalo.migration.entity.elvis.Mitglieder;
 import de.bimalo.migration.entity.kurabu.KurabuMitglied;
@@ -8,7 +9,6 @@ import org.apache.camel.Exchange;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.converter.jaxb.JaxbDataFormat;
-import org.apache.camel.model.dataformat.BindyType;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.util.List;
@@ -36,11 +36,6 @@ public final class MitgliederMigrationRoute extends RouteBuilder {
                 .unmarshal(jaxbDataFormat)
 
                 //.bean(new BeitragsklassenAnalyzer(), "analyze")
-                //.bean(new AbteilungenAnalyzer(), "analyze")
-                //.bean(new KommunikationAnalyzer(), "analyze")
-                //.bean(new BankdatenAnalyzer(), "analyze")
-                //.bean(new ElvisToKurabuMitgliederMapper(), "map")
-                //.log(LoggingLevel.INFO, "${body}")
 
                 .enrich(MitgliederIbanDataRoute.ROUTE_URL, new AggregationStrategy() {
                     @Override
@@ -51,24 +46,13 @@ public final class MitgliederMigrationRoute extends RouteBuilder {
 
                         ElvisToKurabuMitgliederMapper mapper = new ElvisToKurabuMitgliederMapper();
                         mapper.setElvisMitgliederIbanListe(elvisMitgliederIbanListe);
-                        List<KurabuMitglied> kurabuMitglieder = mapper.map(elvisMitglieder);
+                        List<MappingResult<Mitglieder.Mitglied, KurabuMitglied>> mappingResults = mapper.map(elvisMitglieder);
 
-                        newExchange.getIn().setBody(kurabuMitglieder);
+                        newExchange.getIn().setBody(mappingResults);
 
                         return newExchange;
                     }
-                })
-
-                .marshal().bindy(BindyType.Csv, KurabuMitglied.class);
-
-                /*
-                .process(new Processor() {
-                    @Override
-                    public void process(Exchange exchange) throws Exception {
-                        System.out.println("Test");
-                    }
-                })*/
-
+                });
 
     }
     //spotless:on
