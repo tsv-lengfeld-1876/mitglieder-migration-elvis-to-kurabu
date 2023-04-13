@@ -1,11 +1,13 @@
 package de.bimalo.migration.entity.kurabu;
 
+import io.quarkus.runtime.util.StringUtil;
 import java.time.LocalDate;
+import java.util.StringJoiner;
 import lombok.Data;
 import org.apache.camel.dataformat.bindy.annotation.CsvRecord;
 import org.apache.camel.dataformat.bindy.annotation.DataField;
 
-@CsvRecord(separator = ";", generateHeaderColumns = true)
+@CsvRecord(separator = ";", generateHeaderColumns = true, quoting = true, quotingEscaped = true)
 @Data
 public final class KurabuMitglied {
 
@@ -131,4 +133,46 @@ public final class KurabuMitglied {
 
   @DataField(pos = 41, columnName = "Senioreneinladung")
   private boolean senioreneinladung = false;
+
+  public boolean addEhrung(String ehrung) {
+    if (!StringUtil.isNullOrEmpty(ehrung)) {
+      StringJoiner ehrungenJoiner = new StringJoiner(";");
+      if (!StringUtil.isNullOrEmpty(ehrungen)) {
+        ehrungenJoiner.add(ehrungen);
+      }
+      ehrungenJoiner.add(ehrung);
+      ehrungen = ehrungenJoiner.toString();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public boolean addNotiz(String notiz) {
+    if (!StringUtil.isNullOrEmpty(notiz)) {
+      StringJoiner notizenJoiner = new StringJoiner("\n");
+      if (!StringUtil.isNullOrEmpty(notizen)) {
+        notizenJoiner.add(notizen);
+      }
+      notizenJoiner.add(notiz);
+      notizen = notizenJoiner.toString();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public boolean addBeitrag(String beitrag) {
+    if (!StringUtil.isNullOrEmpty(beitrag)) {
+      StringJoiner beitragsJoiner = new StringJoiner(";");
+      if (!StringUtil.isNullOrEmpty(beitraege)) {
+        beitragsJoiner.add(beitraege);
+      }
+      beitragsJoiner.add(beitrag);
+      beitraege = beitragsJoiner.toString();
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

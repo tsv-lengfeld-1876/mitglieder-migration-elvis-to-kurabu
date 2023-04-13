@@ -8,7 +8,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringJoiner;
 import java.util.stream.Collectors;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -143,11 +142,9 @@ public final class ElvisToKurabuMitgliederMapper {
 
   private void mapAbteilungToNotizen(
       Mitglieder.Mitglied elvisMitglied, KurabuMitglied kurabuMitglied) {
-    StringJoiner notizenJoiner = new StringJoiner("\n");
-
     for (Mitglieder.Mitglied.Abteilungen.Abteilung elvisAbteilung :
         elvisMitglied.getAbteilungen().getAbteilung()) {
-      notizenJoiner.add(
+      kurabuMitglied.addNotiz(
           String.format(
               "Abteilung %s (%s): Eintritt= %s - Austritt= %s.",
               elvisAbteilung.getBezeichnung(),
@@ -155,27 +152,35 @@ public final class ElvisToKurabuMitgliederMapper {
               elvisAbteilung.getEintrittsdatum(),
               elvisAbteilung.getAustrittsdatum()));
     }
-
-    notizenJoiner.add("");
-    kurabuMitglied.setNotizen("\"" + notizenJoiner.toString() + "\"");
   }
 
   private void mapBeitraege(Mitglieder.Mitglied elvisMitglied, KurabuMitglied kurabuMitglied) {
-    StringJoiner beitragsJoiner = new StringJoiner(";");
-
     for (Mitglieder.Mitglied.Beitraege.Beitrag elvisBeitrag :
         elvisMitglied.getBeitraege().getBeitrag()) {
       Beitragsklasse beitragsKlasse =
           Beitragsklasse.findBeitragsklasseByElvis(elvisBeitrag.getBeitragsart().strip());
       if (beitragsKlasse.mustBeMigrated()) {
-        beitragsJoiner.add(beitragsKlasse.getKurabuBeitrag());
+        kurabuMitglied.addBeitrag(beitragsKlasse.getKurabuBeitrag());
       }
     }
-    kurabuMitglied.setBeitraege("\"" + beitragsJoiner.toString() + "\"");
   }
 
   private void mapEhrungen(Mitglieder.Mitglied elvisMitglied, KurabuMitglied kurabuMitglied) {
-    // TODO
+
+    for (Mitglieder.Mitglied.Ehrungen.Ehrung elvisEhrung :
+        elvisMitglied.getEhrungen().getEhrung()) {
+      kurabuMitglied.addNotiz(
+          String.format(
+              "Ehrung %s (%s) verliehen am %s",
+              elvisEhrung.getEhrung(), elvisEhrung.getEhrungKng(), elvisEhrung.getEhrungsdatum()));
+      try {
+        Ehrung ehrung = Ehrung.findEhrungByElvis(elvisEhrung.getEhrungKng());
+        kurabuMitglied.addEhrung(ehrung.getKurabuEhrung());
+      } catch (Exception ex) {
+        // can be ignored, only a warning will be printend to log
+        log.warning(ex.getMessage());
+      }
+    }
   }
 
   private void mapFamilie(Mitglieder.Mitglied elvisMitglied, KurabuMitglied kurabuMitglied) {

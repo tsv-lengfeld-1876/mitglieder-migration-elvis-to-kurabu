@@ -41,7 +41,8 @@ public final class AbteilungszuordnungBuilder {
 
     for (Mitglieder.Mitglied.Abteilungen.Abteilung elvisAbteilung :
         elvisMitglied.getAbteilungen().getAbteilung()) {
-      Optional<Abteilung> neueAbteilung = Abteilung.findAbteilungByElvis(elvisAbteilung.getBezeichnung());
+      Optional<Abteilung> neueAbteilung =
+          Abteilung.findAbteilungByElvis(elvisAbteilung.getBezeichnung());
       if (neueAbteilung.isPresent()) {
         abtlJoiner.add(neueAbteilung.get().getKurabuAbteilung());
       }

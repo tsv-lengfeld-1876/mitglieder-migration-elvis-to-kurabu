@@ -1,9 +1,8 @@
 package de.bimalo.migration.application;
 
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import java.util.Optional;
 
 @Getter
 @AllArgsConstructor

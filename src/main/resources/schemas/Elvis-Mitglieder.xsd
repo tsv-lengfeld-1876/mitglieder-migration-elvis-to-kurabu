@@ -207,7 +207,7 @@
                                 </xs:complexType>
                             </xs:element>
                             <xs:element name="Funktionen">
-                                <xs:complexType mixed="true">
+                                <xs:complexType>
                                     <xs:sequence>
                                         <xs:element name="Funktion" maxOccurs="unbounded" minOccurs="0">
                                             <xs:complexType>
@@ -229,9 +229,9 @@
                                 </xs:complexType>
                             </xs:element>
                             <xs:element name="Ehrungen">
-                                <xs:complexType mixed="true">
+                                <xs:complexType>
                                     <xs:sequence>
-                                        <xs:element name="Ehrung" minOccurs="0">
+                                        <xs:element name="Ehrung" maxOccurs="unbounded" minOccurs="0">
                                             <xs:complexType>
                                                 <xs:sequence>
                                                     <xs:element type="xs:string" name="EhrungKng"/>
