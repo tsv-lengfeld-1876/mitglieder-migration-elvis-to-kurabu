@@ -5,6 +5,8 @@ import lombok.Getter;
 
 @AllArgsConstructor
 public enum Ehrung {
+  TSV_LEISTUNGSNADEL_EHRENMITGLIED("EMI", "Ehrenmitglied", "Ehrenmitglied", true),
+  TSV_LEISTUNGSNADEL_EHRENVORSITZ("EVS", "Ehrenvorsitz", "Ehrenvorsitz", true),
   TSV_LEISTUNGSNADEL_GOLD("ELG", "Leistungsnadel Gold", "TSV-Leistungsnadel Gold", true),
   TSV_LEISTUNGSNADEL_SILBER("ELS", "Leistungsnadel Silber", "TSV-Leistungsnadel Silber", true),
   TSV_LEISTUNGSNADEL_BRONZE("ELB", "Leistungsnadel Bronze", "TSV-Leistungsnadel Bronze", true),
@@ -13,6 +15,8 @@ public enum Ehrung {
   TSV_SONDEREHRUNG("ESO", "Sonderehrungen", "TSV-Sonderehrungen", true),
   TSV_VEREINSNADEL_GOLD("E40", "Vereinsnadel Gold 40 Jahre", "TSV-Vereinsnadel Gold", true),
   TSV_VEREINSNADEL_GOLD_50("E50", "Vereinsnadel Gold 50 Jahre", "TSV-Vereinsnadel Gold", true),
+  TSV_VEREINSNADEL_GOLD_60(
+      "E60", "Vereinsnadel Gold 60 J.Ehrenurk.", "TSV-Vereinsnadel Gold", false),
   TSV_VEREINSNADEL_SILBER("E25", "Vereinsnadel Silber", "TSV-Vereinsnadel Silber", true),
   TSV_VEREINSNADEL_BRONZE("E15", "Vereinsnadel Bronze", "TSV-Vereinsnadel Bronze", true);
 

@@ -57,10 +57,11 @@ public final class ElvisToKurabuMitgliederMapper {
       mapKommunikation(elvisMitglied, kurabuMitglied);
       mapMitgliederStatus(elvisMitglied, kurabuMitglied);
       mapZahlungsdaten(elvisMitglied, kurabuMitglied);
-      mapAbteilungToNotizen(elvisMitglied, kurabuMitglied);
+      mapAbteilung(elvisMitglied, kurabuMitglied);
       mapBeitraege(elvisMitglied, kurabuMitglied);
       mapFamilie(elvisMitglied, kurabuMitglied);
       mapEhrungen(elvisMitglied, kurabuMitglied);
+      mapFunktionen(elvisMitglied, kurabuMitglied);
       mapCustomFields(elvisMitglied, kurabuMitglied);
 
       mappingResult.setTarget(kurabuMitglied);
@@ -83,6 +84,7 @@ public final class ElvisToKurabuMitgliederMapper {
     kurabuMitglied.setGeschlecht(
         Geschlecht.findGeschlechtByElvis(elvisMitglied.getPersonalien().getGeschlecht())
             .getKurabuGeschlecht());
+    kurabuMitglied.setNationalitaet(elvisMitglied.getPersonalien().getNationalitaet());
   }
 
   private void mapAdresse(Mitglieder.Mitglied elvisMitglied, KurabuMitglied kurabuMitglied) {
@@ -140,8 +142,7 @@ public final class ElvisToKurabuMitgliederMapper {
     }
   }
 
-  private void mapAbteilungToNotizen(
-      Mitglieder.Mitglied elvisMitglied, KurabuMitglied kurabuMitglied) {
+  private void mapAbteilung(Mitglieder.Mitglied elvisMitglied, KurabuMitglied kurabuMitglied) {
     for (Mitglieder.Mitglied.Abteilungen.Abteilung elvisAbteilung :
         elvisMitglied.getAbteilungen().getAbteilung()) {
       kurabuMitglied.addNotiz(
@@ -175,7 +176,28 @@ public final class ElvisToKurabuMitgliederMapper {
               elvisEhrung.getEhrung(), elvisEhrung.getEhrungKng(), elvisEhrung.getEhrungsdatum()));
       try {
         Ehrung ehrung = Ehrung.findEhrungByElvis(elvisEhrung.getEhrungKng());
-        kurabuMitglied.addEhrung(ehrung.getKurabuEhrung());
+        if (ehrung.mustBeMigrated()) {
+          kurabuMitglied.addEhrung(ehrung.getKurabuEhrung());
+        }
+      } catch (Exception ex) {
+        // can be ignored, only a warning will be printend to log
+        log.warning(ex.getMessage());
+      }
+    }
+  }
+
+  private void mapFunktionen(Mitglieder.Mitglied elvisMitglied, KurabuMitglied kurabuMitglied) {
+
+    for (Mitglieder.Mitglied.Funktionen.Funktion elvisFunktion :
+        elvisMitglied.getFunktionen().getFunktion()) {
+      kurabuMitglied.addNotiz(
+          String.format(
+              "Funktion %s von %s bis %s",
+              elvisFunktion.getFunktion(),
+              elvisFunktion.getVondatum(),
+              elvisFunktion.getBisdatum()));
+      try {
+        // TODO
       } catch (Exception ex) {
         // can be ignored, only a warning will be printend to log
         log.warning(ex.getMessage());
@@ -188,7 +210,85 @@ public final class ElvisToKurabuMitgliederMapper {
   }
 
   private void mapCustomFields(Mitglieder.Mitglied elvisMitglied, KurabuMitglied kurabuMitglied) {
-    // TODO
+    // Ehrenmitglied
+    Mitglieder.Mitglied.Ehrungen.Ehrung elvisEhrung =
+        elvisMitglied.getEhrungen().getEhrung().stream()
+            .filter(e -> e.getEhrungKng().equals("EMI"))
+            .findAny()
+            .orElse(null);
+    if (elvisEhrung != null) {
+      kurabuMitglied.setEhrenmitglied(true);
+    }
+
+    // Integrationshintergrund
+    Mitglieder.Mitglied.Serienkennungen.Serienkennung intKennung =
+        elvisMitglied.getSerienkennungen().getSerienkennung().stream()
+            .filter(s -> s.getKennung().equals("Int"))
+            .findAny()
+            .orElse(null);
+    if (intKennung != null) {
+      kurabuMitglied.setIntegrationshintergrund(true);
+    }
+
+    // TSVaktuell via Post
+    Mitglieder.Mitglied.Serienkennungen.Serienkennung tsvaktuellpostKennung =
+        elvisMitglied.getSerienkennungen().getSerienkennung().stream()
+            .filter(s -> s.getKennung().equals("PTSV"))
+            .findAny()
+            .orElse(null);
+    if (tsvaktuellpostKennung != null) {
+      kurabuMitglied.setTsvaktuellAlsPapier(true);
+    }
+
+    // Führungszeugnis vorgelegt
+    Mitglieder.Mitglied.Serienkennungen.Serienkennung fuehrungszeugnisKennung =
+        elvisMitglied.getSerienkennungen().getSerienkennung().stream()
+            .filter(s -> s.getKennung().equalsIgnoreCase("Füh"))
+            .findAny()
+            .orElse(null);
+    if (fuehrungszeugnisKennung != null) {
+      kurabuMitglied.setFuehrungszeugnisVorgelegt(true);
+    }
+
+    // Übungsleiter
+    Mitglieder.Mitglied.Funktionen.Funktion ubungsleiter =
+        elvisMitglied.getFunktionen().getFunktion().stream()
+            .filter(f -> f.getFunktionKng().equals("F04"))
+            .findAny()
+            .orElse(null);
+    if (ubungsleiter != null) {
+      kurabuMitglied.setUebungsleiterlizenz(elvisMitglied.getNummerUebungsleiter());
+    }
+
+    // verstorben
+    Mitglieder.Mitglied.Serienkennungen.Serienkennung totKennung =
+        elvisMitglied.getSerienkennungen().getSerienkennung().stream()
+            .filter(s -> s.getKennung().equalsIgnoreCase("tot"))
+            .findAny()
+            .orElse(null);
+    if (totKennung != null) {
+      kurabuMitglied.setVerstorben(true);
+    }
+
+    // ALG
+    Mitglieder.Mitglied.Serienkennungen.Serienkennung algKennung =
+        elvisMitglied.getSerienkennungen().getSerienkennung().stream()
+            .filter(s -> s.getKennung().equalsIgnoreCase("ALG"))
+            .findAny()
+            .orElse(null);
+    if (algKennung != null) {
+      kurabuMitglied.setAlgBezieher(true);
+    }
+
+    // keine Senioreneinladung erhalten
+    Mitglieder.Mitglied.Serienkennungen.Serienkennung seniorKennung =
+        elvisMitglied.getSerienkennungen().getSerienkennung().stream()
+            .filter(s -> s.getKennung().equalsIgnoreCase("Sen"))
+            .findAny()
+            .orElse(null);
+    if (seniorKennung != null) {
+      kurabuMitglied.setSenioreneinladung(true);
+    }
   }
 
   private boolean isSelbstzahler(Mitglieder.Mitglied elvisMitglied) {
