@@ -9,6 +9,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import io.quarkus.runtime.util.StringUtil;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 import org.iban4j.CountryCode;
@@ -197,7 +199,10 @@ public final class ElvisToKurabuMitgliederMapper {
               elvisFunktion.getVondatum(),
               elvisFunktion.getBisdatum()));
       try {
-        // TODO
+        Funktion funktion = Funktion.findFunktionByElvis(elvisFunktion.getFunktionKng());
+        if (funktion.mustBeMigrated() & StringUtil.isNullOrEmpty(elvisFunktion.getBisdatum())) {
+          kurabuMitglied.addFunktion(funktion.getKurabuFunktion());
+        }
       } catch (Exception ex) {
         // can be ignored, only a warning will be printend to log
         log.warning(ex.getMessage());

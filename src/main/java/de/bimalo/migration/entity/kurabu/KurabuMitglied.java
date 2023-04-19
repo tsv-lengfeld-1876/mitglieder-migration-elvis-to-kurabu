@@ -4,6 +4,7 @@ import io.quarkus.runtime.util.StringUtil;
 import java.time.LocalDate;
 import java.util.StringJoiner;
 import lombok.Data;
+import org.apache.camel.dataformat.bindy.annotation.BindyConverter;
 import org.apache.camel.dataformat.bindy.annotation.CsvRecord;
 import org.apache.camel.dataformat.bindy.annotation.DataField;
 
@@ -81,6 +82,7 @@ public final class KurabuMitglied {
   private String saldo;
 
   @DataField(pos = 24, columnName = "Teamleiter(in)")
+  @BindyConverter(BooleanConverter.class)
   private boolean teamleiter = false;
 
   @DataField(pos = 25, columnName = "Notizen")
@@ -99,6 +101,7 @@ public final class KurabuMitglied {
   private String kuendigungsGrund;
 
   @DataField(pos = 30, columnName = "Ehrenmitglied")
+  @BindyConverter(BooleanConverter.class)
   private boolean ehrenmitglied;
 
   @DataField(pos = 31, columnName = "Funktionen")
@@ -111,12 +114,15 @@ public final class KurabuMitglied {
   private String nationalitaet;
 
   @DataField(pos = 34, columnName = "Integrationshintergrund")
+  @BindyConverter(BooleanConverter.class)
   private boolean integrationshintergrund = false;
 
   @DataField(pos = 35, columnName = "TSV-aktuell in Papierform")
+  @BindyConverter(BooleanConverter.class)
   private boolean tsvaktuellAlsPapier = false;
 
   @DataField(pos = 36, columnName = "Führungszeugnis vorgelegt")
+  @BindyConverter(BooleanConverter.class)
   private boolean fuehrungszeugnisVorgelegt = false;
 
   @DataField(pos = 37, columnName = "Übungsleiterlizenz")
@@ -126,22 +132,39 @@ public final class KurabuMitglied {
   private LocalDate uebungsleiterlizenzGueltigBis;
 
   @DataField(pos = 39, columnName = "verstorben")
+  @BindyConverter(BooleanConverter.class)
   private boolean verstorben = false;
 
   @DataField(pos = 40, columnName = "ALG-Bezieher")
+  @BindyConverter(BooleanConverter.class)
   private boolean algBezieher = false;
 
   @DataField(pos = 41, columnName = "Senioreneinladung")
+  @BindyConverter(BooleanConverter.class)
   private boolean senioreneinladung = false;
+
+  public boolean addFunktion(String funktion) {
+    if (!StringUtil.isNullOrEmpty(funktion)) {
+      StringJoiner funktionenJoiner = new StringJoiner(";");
+      if (!StringUtil.isNullOrEmpty(this.funktionen)) {
+        funktionenJoiner.add(this.funktionen);
+      }
+      funktionenJoiner.add(funktion);
+      this.funktionen = funktionenJoiner.toString();
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   public boolean addEhrung(String ehrung) {
     if (!StringUtil.isNullOrEmpty(ehrung)) {
       StringJoiner ehrungenJoiner = new StringJoiner(";");
-      if (!StringUtil.isNullOrEmpty(ehrungen)) {
-        ehrungenJoiner.add(ehrungen);
+      if (!StringUtil.isNullOrEmpty(this.ehrungen)) {
+        ehrungenJoiner.add(this.ehrungen);
       }
       ehrungenJoiner.add(ehrung);
-      ehrungen = ehrungenJoiner.toString();
+      this.ehrungen = ehrungenJoiner.toString();
       return true;
     } else {
       return false;
@@ -151,11 +174,11 @@ public final class KurabuMitglied {
   public boolean addNotiz(String notiz) {
     if (!StringUtil.isNullOrEmpty(notiz)) {
       StringJoiner notizenJoiner = new StringJoiner("\n");
-      if (!StringUtil.isNullOrEmpty(notizen)) {
-        notizenJoiner.add(notizen);
+      if (!StringUtil.isNullOrEmpty(this.notizen)) {
+        notizenJoiner.add(this.notizen);
       }
       notizenJoiner.add(notiz);
-      notizen = notizenJoiner.toString();
+      this.notizen = notizenJoiner.toString();
       return true;
     } else {
       return false;
@@ -165,11 +188,11 @@ public final class KurabuMitglied {
   public boolean addBeitrag(String beitrag) {
     if (!StringUtil.isNullOrEmpty(beitrag)) {
       StringJoiner beitragsJoiner = new StringJoiner(";");
-      if (!StringUtil.isNullOrEmpty(beitraege)) {
-        beitragsJoiner.add(beitraege);
+      if (!StringUtil.isNullOrEmpty(this.beitraege)) {
+        beitragsJoiner.add(this.beitraege);
       }
       beitragsJoiner.add(beitrag);
-      beitraege = beitragsJoiner.toString();
+      this.beitraege = beitragsJoiner.toString();
       return true;
     } else {
       return false;
