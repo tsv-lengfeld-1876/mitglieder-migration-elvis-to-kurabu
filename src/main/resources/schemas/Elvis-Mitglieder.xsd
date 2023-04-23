@@ -104,7 +104,7 @@
                             <xs:element name="Zahlerdaten" minOccurs="0">
                                 <xs:complexType>
                                     <xs:sequence>
-                                        <xs:element type="xs:int" name="Zahler"/>
+                                        <xs:element type="xs:string" name="Zahler"/>
                                     </xs:sequence>
                                 </xs:complexType>
                             </xs:element>
