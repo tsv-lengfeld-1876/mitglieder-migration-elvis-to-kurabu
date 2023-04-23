@@ -35,8 +35,6 @@ public final class MitgliederMigrationRoute extends RouteBuilder {
                 .log(LoggingLevel.DEBUG, "Unmarshal Mitglieder from ELVIS to POJO ...")
                 .unmarshal(jaxbDataFormat)
 
-                //.bean(new BeitragsklassenAnalyzer(), "analyze")
-
                 .enrich(MitgliederIbanDataRoute.ROUTE_URL, new AggregationStrategy() {
                     @Override
                     public Exchange aggregate(Exchange oldExchange, Exchange newExchange) {

@@ -4,13 +4,15 @@ import de.bimalo.migration.entity.MappingResult;
 import de.bimalo.migration.entity.elvis.ElvisMitgliedWithIban;
 import de.bimalo.migration.entity.elvis.Mitglieder;
 import de.bimalo.migration.entity.kurabu.KurabuMitglied;
+import io.quarkus.runtime.util.StringUtil;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
-
-import io.quarkus.runtime.util.StringUtil;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 import org.iban4j.CountryCode;
@@ -22,6 +24,7 @@ public final class ElvisToKurabuMitgliederMapper {
 
   private DateTimeFormatter dateFormatter;
   private List<ElvisMitgliedWithIban> elvisMitgliederIbanListe;
+  private Map<String, Mitglieder.Mitglied> mitgliederCache;
 
   public ElvisToKurabuMitgliederMapper() {
     dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
@@ -41,9 +44,24 @@ public final class ElvisToKurabuMitgliederMapper {
 
   public List<MappingResult<Mitglieder.Mitglied, KurabuMitglied>> map(
       @NonNull Mitglieder elvisMitglieder) {
+    populateMitgliederCache(elvisMitglieder);
     return elvisMitglieder.getMitglied().stream()
         .map(em -> mapMitglied(em))
         .collect(Collectors.toList());
+  }
+
+  private void populateMitgliederCache(Mitglieder elvisMitglieder) {
+    mitgliederCache =
+        elvisMitglieder.getMitglied().stream()
+            .collect(Collectors.toMap(Mitglieder.Mitglied::getNummer, Function.identity()));
+  }
+
+  private Optional<Mitglieder.Mitglied> findCachedMitglied(String nummer) {
+    if (!StringUtil.isNullOrEmpty(nummer) && mitgliederCache.containsKey(nummer)) {
+      return Optional.of(mitgliederCache.get(nummer));
+    } else {
+      return Optional.empty();
+    }
   }
 
   private MappingResult<Mitglieder.Mitglied, KurabuMitglied> mapMitglied(
@@ -61,16 +79,12 @@ public final class ElvisToKurabuMitgliederMapper {
       mapZahlungsdaten(elvisMitglied, kurabuMitglied);
       mapAbteilung(elvisMitglied, kurabuMitglied);
       mapBeitraege(elvisMitglied, kurabuMitglied);
-      mapFamilie(elvisMitglied, kurabuMitglied);
       mapEhrungen(elvisMitglied, kurabuMitglied);
       mapFunktionen(elvisMitglied, kurabuMitglied);
       mapCustomFields(elvisMitglied, kurabuMitglied);
 
       mappingResult.setTarget(kurabuMitglied);
     } catch (Exception ex) {
-      // log.info(String.format("Could not migrate %s %s (%s), because of %s.",
-      // elvisMitglied.getPersonalien().getVorname(), elvisMitglied.getPersonalien().getNachname(),
-      // elvisMitglied.getNummer(), ex.getMessage()));
       mappingResult.addException(ex);
     }
     return mappingResult;
@@ -141,6 +155,16 @@ public final class ElvisToKurabuMitgliederMapper {
       } else if (zahlungsArt == Zahlungsart.RECHNUNGSZAHLER) {
         kurabuMitglied.setSaldo(elvisMitglied.getZahlungsdaten().getKontosaldo());
       }
+    } else {
+      Optional<Mitglieder.Mitglied> zahler =
+          findCachedMitglied(elvisMitglied.getZahlerdaten().getZahler());
+      if (zahler.isPresent()) {
+        kurabuMitglied.setFamilienGruppe(
+            String.format(
+                "%s %s",
+                zahler.get().getPersonalien().getVorname(),
+                zahler.get().getPersonalien().getNachname()));
+      }
     }
   }
 
@@ -208,10 +232,6 @@ public final class ElvisToKurabuMitgliederMapper {
         log.warning(ex.getMessage());
       }
     }
-  }
-
-  private void mapFamilie(Mitglieder.Mitglied elvisMitglied, KurabuMitglied kurabuMitglied) {
-    // TODO
   }
 
   private void mapCustomFields(Mitglieder.Mitglied elvisMitglied, KurabuMitglied kurabuMitglied) {

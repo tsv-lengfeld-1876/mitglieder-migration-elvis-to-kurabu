@@ -5,24 +5,23 @@ import org.apache.camel.dataformat.bindy.Format;
 
 public final class BooleanConverter implements Format<Boolean> {
 
-    private final static String NEIN = "nein";
-    private final static String JA = "ja";
+  private static final String NEIN = "nein";
+  private static final String JA = "ja";
 
-    @Override
-    public String format(Boolean object) throws Exception {
-        if (object != null && Boolean.TRUE.equals(object)) {
-            return JA;
-        }
-        else {
-            return NEIN;
-        }
+  @Override
+  public String format(Boolean object) throws Exception {
+    if (object != null && Boolean.TRUE.equals(object)) {
+      return JA;
+    } else {
+      return NEIN;
     }
+  }
 
-    @Override
-    public Boolean parse(String string) throws Exception {
-        if (StringUtil.isNullOrEmpty(string)) {
-            throw new IllegalArgumentException("No value provided that can be converted to Boolean.");
-        }
-        return Boolean.valueOf(string);
+  @Override
+  public Boolean parse(String string) throws Exception {
+    if (StringUtil.isNullOrEmpty(string)) {
+      throw new IllegalArgumentException("No value provided that can be converted to Boolean.");
     }
+    return Boolean.valueOf(string);
+  }
 }
