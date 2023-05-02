@@ -25,6 +25,7 @@ public final class MitgliederMigrationRoute extends RouteBuilder {
 
         JaxbDataFormat jaxbDataFormat = new JaxbDataFormat();
         jaxbDataFormat.setContextPath(Mitglieder.class.getPackage().getName());
+        jaxbDataFormat.setEncoding("UTF-8");
         jaxbDataFormat.setSchemaLocation("schemas/Elvis-Mitglieder.xsd");
 
         from(ROUTE_URL)
