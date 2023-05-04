@@ -25,10 +25,12 @@ public final class ElvisToKurabuMitgliederMapper {
   private DateTimeFormatter dateFormatter;
   private List<ElvisMitgliedWithIban> elvisMitgliederIbanListe;
   private Map<String, Mitglieder.Mitglied> mitgliederCache;
+  private List<String> emailCache;
 
   public ElvisToKurabuMitgliederMapper() {
     dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     elvisMitgliederIbanListe = new ArrayList<>();
+    emailCache = new ArrayList<>();
   }
 
   public ElvisToKurabuMitgliederMapper(
@@ -129,7 +131,11 @@ public final class ElvisToKurabuMitgliederMapper {
 
   private void mapKommunikation(Mitglieder.Mitglied elvisMitglied, KurabuMitglied kurabuMitglied) {
     kurabuMitglied.setTelefon(elvisMitglied.getKommunikation().getPrivat().getTelefon());
-    kurabuMitglied.setEmail(elvisMitglied.getKommunikation().getPrivat().getEmail());
+    String email = elvisMitglied.getKommunikation().getPrivat().getEmail();
+    if (!StringUtil.isNullOrEmpty(email) && !emailCache.contains(email.toUpperCase())) {
+      kurabuMitglied.setEmail(email);
+      emailCache.add(email.toUpperCase());
+    }
     kurabuMitglied.setMobil(elvisMitglied.getKommunikation().getPrivat().getMobil());
     if (isValidValue(elvisMitglied.getKommunikation().getDienstlich().getTelefon())) {
       kurabuMitglied.setTelefon2(elvisMitglied.getKommunikation().getDienstlich().getTelefon());

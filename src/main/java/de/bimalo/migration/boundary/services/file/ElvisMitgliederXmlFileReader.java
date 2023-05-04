@@ -21,7 +21,7 @@ public final class ElvisMitgliederXmlFileReader extends RouteBuilder {
     getCamelContext().setUseMDCLogging(true);
     getCamelContext().setUseBreadcrumb(true);
 
-    from("file:src/test/resources/?fileName=Export-XML-Mitglieder-Alle.xml&charset=UTF-8")
+    from("file:src/test/resources/?include=mitglieder-.*.xml&charset=UTF-8")
         .routeId(ROUTE_ID)
         .setHeader(Exchange.BREADCRUMB_ID, simple("date:now:YYYYMMddHH:mm:ss"))
         .log(
