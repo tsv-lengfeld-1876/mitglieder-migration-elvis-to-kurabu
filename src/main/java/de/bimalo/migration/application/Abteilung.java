@@ -3,6 +3,7 @@ package de.bimalo.migration.application;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NonNull;
 
 @Getter
 @AllArgsConstructor
@@ -24,12 +25,16 @@ public enum Abteilung {
   private String kurabuAbteilung;
   private boolean migrate;
 
-  public static Optional<Abteilung> findAbteilungByElvis(String elvisAbteilung) {
+  public static Optional<Abteilung> findAbteilungByElvis(@NonNull String elvisAbteilung) {
     for (Abteilung c : values()) {
-      if (c.elvisAbteilung.equals(elvisAbteilung)) {
+      if (c.elvisAbteilung.equals(elvisAbteilung.strip())) {
         return Optional.of(c);
       }
     }
     return Optional.empty();
+  }
+
+  public boolean mustBeMigrated() {
+    return migrate;
   }
 }

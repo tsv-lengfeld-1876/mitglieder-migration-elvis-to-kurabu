@@ -58,12 +58,28 @@ public final class ElvisToKurabuMitgliederMapper {
             .collect(Collectors.toMap(Mitglieder.Mitglied::getNummer, Function.identity()));
   }
 
-  private Optional<Mitglieder.Mitglied> findCachedMitglied(String nummer) {
-    if (!StringUtil.isNullOrEmpty(nummer) && mitgliederCache.containsKey(nummer)) {
-      return Optional.of(mitgliederCache.get(nummer));
+  private Optional<Mitglieder.Mitglied> findCachedMitglied(String mitgliedsNr) {
+    if (!StringUtil.isNullOrEmpty(mitgliedsNr) && mitgliederCache.containsKey(mitgliedsNr)) {
+      return Optional.of(mitgliederCache.get(mitgliedsNr));
     } else {
       return Optional.empty();
     }
+  }
+
+  private boolean isFamilie(String mitgliedsNr) {
+    return !StringUtil.isNullOrEmpty(mitgliedsNr)
+        && mitgliederCache.values().stream()
+                .filter(
+                    m -> {
+                      if (m.getZahlerdaten() != null) {
+                        return mitgliedsNr.equals(m.getZahlerdaten().getZahler());
+                      } else {
+                        return false;
+                      }
+                    })
+                .findAny()
+                .orElse(null)
+            != null;
   }
 
   private MappingResult<Mitglieder.Mitglied, KurabuMitglied> mapMitglied(
@@ -161,15 +177,24 @@ public final class ElvisToKurabuMitgliederMapper {
       } else if (zahlungsArt == Zahlungsart.RECHNUNGSZAHLER) {
         kurabuMitglied.setSaldo(elvisMitglied.getZahlungsdaten().getKontosaldo());
       }
+      if (isFamilie(elvisMitglied.getNummer())) {
+        String zahlerName =
+            String.format(
+                "%s %s",
+                elvisMitglied.getPersonalien().getVorname(),
+                elvisMitglied.getPersonalien().getNachname());
+        kurabuMitglied.setFamilienGruppe(zahlerName);
+      }
     } else {
       Optional<Mitglieder.Mitglied> zahler =
           findCachedMitglied(elvisMitglied.getZahlerdaten().getZahler());
       if (zahler.isPresent()) {
-        kurabuMitglied.setFamilienGruppe(
+        String zahlerName =
             String.format(
                 "%s %s",
                 zahler.get().getPersonalien().getVorname(),
-                zahler.get().getPersonalien().getNachname()));
+                zahler.get().getPersonalien().getNachname());
+        kurabuMitglied.setFamilienGruppe(zahlerName);
       }
     }
   }
@@ -190,10 +215,10 @@ public final class ElvisToKurabuMitgliederMapper {
   private void mapBeitraege(Mitglieder.Mitglied elvisMitglied, KurabuMitglied kurabuMitglied) {
     for (Mitglieder.Mitglied.Beitraege.Beitrag elvisBeitrag :
         elvisMitglied.getBeitraege().getBeitrag()) {
-      Beitragsklasse beitragsKlasse =
+      Optional<Beitragsklasse> beitragsKlasse =
           Beitragsklasse.findBeitragsklasseByElvis(elvisBeitrag.getBeitragsart().strip());
-      if (beitragsKlasse.mustBeMigrated()) {
-        kurabuMitglied.addBeitrag(beitragsKlasse.getKurabuBeitrag());
+      if (beitragsKlasse.isPresent() && beitragsKlasse.get().mustBeMigrated()) {
+        kurabuMitglied.addBeitrag(beitragsKlasse.get().getKurabuBeitrag());
       }
     }
   }

@@ -1,10 +1,9 @@
 package de.bimalo.migration.entity;
 
+import java.time.LocalDate;
 import lombok.Data;
 import org.apache.camel.dataformat.bindy.annotation.CsvRecord;
 import org.apache.camel.dataformat.bindy.annotation.DataField;
-
-import java.time.LocalDate;
 
 @CsvRecord(separator = ";", generateHeaderColumns = true)
 @Data
@@ -27,5 +26,4 @@ public final class Abteilungszuordnung {
 
   @DataField(pos = 6, pattern = "dd.MM.yyyy", columnName = "Austritt")
   private LocalDate austritt;
-
 }

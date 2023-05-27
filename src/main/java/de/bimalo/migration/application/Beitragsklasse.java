@@ -1,9 +1,13 @@
 package de.bimalo.migration.application;
 
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NonNull;
+import lombok.ToString;
 
 @AllArgsConstructor
+@ToString
 public enum Beitragsklasse {
 
   // Hauptbeitrag
@@ -17,7 +21,7 @@ public enum Beitragsklasse {
   SONDERBEITRAG("Sonderbeitrag", "", false),
   ABT_B_BEITRAGSFREI("Abt.B.-beitragsfrei", "", false),
   RENTNER_EHEPAAR("Rentner Ehepaar", "HV - Rentnerehepaare", true),
-  BEITRAGSFREI("beitragsfrei", "", false),
+  BEITRAGSFREI("beitragsfrei", "HV - Beitragsfrei", false),
   NUR_VERSICHERUNGSBEITRAG("nur Versicherungsbeitrag", "", false),
   ALG_II_JUGENDLICHE("ALG II Jugendliche", "HV - Beitragsfrei", true),
   AUSSIEDLER_BEITRAGSFREI("Aussiedler 1 Jahr beitragsfrei", "HV - Beitragsfrei", true),
@@ -25,6 +29,7 @@ public enum Beitragsklasse {
   FAMILIE_BEITRAGSFREI("beitragsfrei Familie", "HV - Beitragsfrei", true),
   ERWACHSENE_EINZEL("Erwachsener Einzel", "HV - Erwachsene", true),
   SONDERBEITRAG2("ÜL-Sonderbeitrag", "", false),
+  VERSICHERUNGSBEITRAG("nur Versicherungsbeitrag", "HV - Versicherungsbeitrag", true),
 
   // Abteilungen
   JUDO_ERHOBEN("Judo erhoben", "", false),
@@ -75,7 +80,8 @@ public enum Beitragsklasse {
   FUSSBALL_ALTE_HERREN("FB Alte Herren", "Fußball - Alte Herren", true),
   FUSSBALL_ANTEILIG("FB anteilig", "", false),
   FUSSBALL_KINDER("FB Kinder", "Fußball - Kinder", true),
-  FUSSBALL_ABTEILUNG_BEITRAGSFREI("FB abteilungsbeitragsfrei", "Fußball - Beitragsfrei", true),
+  FUSSBALL_ABTEILUNG_BEITRAGSFREI(
+      "FB abteilungsbeitragsfrei", "Fußball - Beitragsfrei - aktiv", true),
   FUSSBALL_JUGEND("FB Jugentliche", "Fußball - Jugend", true),
   FUSSBALL_JUGEND2("FB Jugendliche", "Fußball - Jugend", true),
 
@@ -104,14 +110,13 @@ public enum Beitragsklasse {
   @Getter private String kurabuBeitrag;
   private boolean migrate;
 
-  public static Beitragsklasse findBeitragsklasseByElvis(String elvisBeitrag) {
+  public static Optional<Beitragsklasse> findBeitragsklasseByElvis(@NonNull String elvisBeitrag) {
     for (Beitragsklasse c : values()) {
-      if (c.elvisBeitrag.equals(elvisBeitrag)) {
-        return c;
+      if (c.elvisBeitrag.equals(elvisBeitrag.strip())) {
+        return Optional.of(c);
       }
     }
-    throw new IllegalArgumentException(
-        String.format("Beitragsklasse %s aus Elvis nicht bekannt.", elvisBeitrag));
+    return Optional.empty();
   }
 
   public boolean mustBeMigrated() {
