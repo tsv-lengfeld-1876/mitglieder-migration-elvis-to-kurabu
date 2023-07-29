@@ -1,0 +1,253 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="Mitglieder">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Mitglied" maxOccurs="unbounded" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element type="xs:string" name="Nummer"/>
+                            <xs:element type="xs:string" name="Nummer-Uebungsleiter"/>
+                            <xs:element type="xs:string" name="Nummer-Kursteilnehmer"/>
+                            <xs:element name="Personalien">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element type="xs:string" name="Schluessel"/>
+                                        <xs:element type="xs:string" name="Anrede"/>
+                                        <xs:element type="xs:string" name="Briefanrede"/>
+                                        <xs:element type="xs:string" name="Titel"/>
+                                        <xs:element type="xs:string" name="Nachname"/>
+                                        <xs:element type="xs:string" name="Vorname"/>
+                                        <xs:element type="xs:string" name="Organisation"/>
+                                        <xs:element type="xs:string" name="Geschlecht"/>
+                                        <xs:element type="xs:string" name="GeschlechtText"/>
+                                        <xs:element type="xs:string" name="Geburtsdatum"/>
+                                        <xs:element type="xs:int" name="GeburtsdatumNum"/>
+                                        <xs:element type="xs:byte" name="Alter"/>
+                                        <xs:element type="xs:string" name="Hochzeitsdatum"/>
+                                        <xs:element type="xs:string" name="Geburtsort"/>
+                                        <xs:element type="xs:string" name="Geburtsname"/>
+                                        <xs:element type="xs:string" name="Beruf"/>
+                                        <xs:element type="xs:string" name="Nationalitaet"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="Adresse">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element type="xs:string" name="co"/>
+                                        <xs:element type="xs:string" name="PostfachalsStandard"/>
+                                        <xs:element type="xs:string" name="Postfach"/>
+                                        <xs:element type="xs:string" name="PostleitzahlPostfach"/>
+                                        <xs:element type="xs:string" name="Strasse"/>
+                                        <xs:element type="xs:string" name="Hausnummer"/>
+                                        <xs:element type="xs:string" name="HausnummerZusatz"/>
+                                        <xs:element type="xs:int" name="Postleitzahl"/>
+                                        <xs:element type="xs:string" name="Ort"/>
+                                        <xs:element type="xs:string" name="Bezirk"/>
+                                        <xs:element type="xs:string" name="Landeskennung"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="Kommunikation">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="Privat">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element type="xs:string" name="Telefon"/>
+                                                    <xs:element type="xs:string" name="Fax"/>
+                                                    <xs:element type="xs:string" name="Mobil"/>
+                                                    <xs:element type="xs:string" name="Pager"/>
+                                                    <xs:element type="xs:string" name="Internetadresse"/>
+                                                    <xs:element type="xs:string" name="email"/>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element name="Dienstlich">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element type="xs:string" name="Telefon"/>
+                                                    <xs:element type="xs:string" name="Fax"/>
+                                                    <xs:element type="xs:string" name="Mobil"/>
+                                                    <xs:element type="xs:string" name="Pager"/>
+                                                    <xs:element type="xs:string" name="Internetadresse"/>
+                                                    <xs:element type="xs:string" name="email"/>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="Status">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element type="xs:string" name="Eintrittsdatum"/>
+                                        <xs:element type="xs:int" name="EintrittsdatumNum"/>
+                                        <xs:element type="xs:string" name="Eintrittsbrief_erstellt"/>
+                                        <xs:element type="xs:string" name="Austrittsdatum"/>
+                                        <xs:element type="xs:string" name="AustrittsdatumNum"/>
+                                        <xs:element type="xs:string" name="Austrittsbrief_erstellt"/>
+                                        <xs:element type="xs:byte" name="Jahr_im_Verein"/>
+                                        <xs:element type="xs:string" name="Kuendigungsdatum"/>
+                                        <xs:element type="xs:string" name="KuendigungsdatumNum"/>
+                                        <xs:element type="xs:string" name="Kuendigungsgrund"/>
+                                        <xs:element type="xs:string" name="Ermaessigt_bis"/>
+                                        <xs:element type="xs:string" name="Ermaessigt_bisNum"/>
+                                        <xs:element type="xs:byte" name="Anzahl_Ausweise"/>
+                                        <xs:element type="xs:string" name="Erstbeitrag" maxOccurs="unbounded"
+                                                    minOccurs="0"/>
+                                        <xs:element type="xs:string" name="Ehrenmitglied"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="Zahlerdaten" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element type="xs:string" name="Zahler"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="Zahlungsdaten" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element type="xs:string" name="Zahlungsart"/>
+                                        <xs:element type="xs:string" name="Kontosaldo"/>
+                                        <xs:element name="Bankverbindung">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element type="xs:string" name="Kontonummer"/>
+                                                    <xs:element type="xs:string" name="Bankleitzahl"/>
+                                                    <xs:element type="xs:string" name="Bankname"/>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element type="xs:string" name="Zahleranrede"/>
+                                        <xs:element type="xs:string" name="Zahlerbriefanrede"/>
+                                        <xs:element type="xs:string" name="Zahlernachname"/>
+                                        <xs:element type="xs:string" name="Zahlervorname"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="Akquisition">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element type="xs:string" name="Methode"/>
+                                        <xs:element type="xs:string" name="am"/>
+                                        <xs:element type="xs:string" name="amNum"/>
+                                        <xs:element type="xs:string" name="durch"/>
+                                        <xs:element type="xs:string" name="Bemerkung"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="CheckInOut">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element type="xs:string" name="CIONr"/>
+                                        <xs:element type="xs:string" name="Schluessel"/>
+                                        <xs:element type="xs:byte" name="Tageskarten"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="Abteilungen">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="Abteilung" maxOccurs="unbounded" minOccurs="0">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element type="xs:string" name="Bezeichnung"/>
+                                                    <xs:element type="xs:string" name="Gruppe"/>
+                                                    <xs:element type="xs:string" name="AktivPassiv"/>
+                                                    <xs:element type="xs:string" name="Eintrittsdatum"/>
+                                                    <xs:element type="xs:int" name="EintrittsdatumNum"/>
+                                                    <xs:element type="xs:string" name="Austrittsdatum"/>
+                                                    <xs:element type="xs:string" name="AustrittsdatumNum"/>
+                                                    <xs:element type="xs:string" name="Hauptabteilung"/>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element type="xs:byte" name="aktive"/>
+                                        <xs:element type="xs:byte" name="passive"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="Beitraege">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="Beitrag" maxOccurs="unbounded" minOccurs="0">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element type="xs:string" name="Beitragsgruppe"/>
+                                                    <xs:element type="xs:string" name="Beitragsart"/>
+                                                    <xs:element type="xs:string" name="Zahlweise"/>
+                                                    <xs:element type="xs:string" name="Betrag"/>
+                                                    <xs:element type="xs:string" name="AufnahmegebuehrBezeichnung"/>
+                                                    <xs:element type="xs:string" name="Aufnahmegebuehr"/>
+                                                    <xs:element type="xs:string" name="Erstbeitrag"/>
+                                                    <xs:element type="xs:string" name="LetzteAbrechnung"/>
+                                                    <xs:element type="xs:string" name="LetzteAbrechnungNum"/>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="Serienkennungen">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="Serienkennung" maxOccurs="unbounded" minOccurs="0">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element type="xs:string" name="Kennung"/>
+                                                    <xs:element type="xs:string" name="Kuerzel"/>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="Funktionen">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="Funktion" maxOccurs="unbounded" minOccurs="0">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element type="xs:string" name="FunktionKng"/>
+                                                    <xs:element type="xs:string" name="Funktion"/>
+                                                    <xs:element type="xs:string" name="AbteilungNr"/>
+                                                    <xs:element type="xs:string" name="Abteilung"/>
+                                                    <xs:element type="xs:string" name="Vondatum"/>
+                                                    <xs:element type="xs:string" name="VondatumNum"/>
+                                                    <xs:element type="xs:string" name="Bisdatum"/>
+                                                    <xs:element type="xs:string" name="BisdatumNum"/>
+                                                    <xs:element type="xs:string" name="KSBPersonennummer"/>
+                                                    <xs:element type="xs:string" name="LSBPersonennummer"/>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="Ehrungen">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="Ehrung" maxOccurs="unbounded" minOccurs="0">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element type="xs:string" name="EhrungKng"/>
+                                                    <xs:element type="xs:string" name="Ehrung"/>
+                                                    <xs:element type="xs:string" name="Ehrungsdatum"/>
+                                                    <xs:element type="xs:int" name="EhrungsdatumNum"/>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
